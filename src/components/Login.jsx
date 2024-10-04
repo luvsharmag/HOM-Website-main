@@ -121,7 +121,7 @@ const Login = () => {
         idToken: idToken
       };
 
-      //replace http://localhost:5000 by 
+      //replace http://localhost:5000 by https://backend-dashboard-dsw0.onrender.com
       const response = await fetch('http://localhost:5000/api/v1/user/google/check', {
         method: 'POST',
         headers: {
