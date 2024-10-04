@@ -42,10 +42,11 @@ function App() {
           {/* Redirect to home page on load */}
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/forgotpassword" element={<ForgotPassword />} />
-          <Route path="/register" element={<Register />} />
           <Route path="/googleRegister" element={<GoogleRegister/>}/>
+
           <Route path="/completeregister" element={<CompleteRegister />} />
+          <Route path="/forgotpassword" element={<ForgotPassword />} />
+          {/* <Route path="/register" element={<Register />} /> */}
 
           {/* Protected Routes */}
           <Route element={<PrivateRoutes />}>

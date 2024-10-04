@@ -19,7 +19,7 @@ const CompleteRegister = () => {
   const [error, setError] = useState(null);
   const [passwordError, setPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false); // State for showing/hiding password
-
+  const [success,setSuccess] = useState("");
   useEffect(() => {
     if (location.state?.email) {
       setEmail(location.state.email);
@@ -34,18 +34,25 @@ const CompleteRegister = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log({
+      fullName,
+      email,
+      confirmPassword,
+      phoneNumber,
+      companyName
 
+    })
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
 
-    if (!validatePassword(password)) {
-      setPasswordError(
-        "Password must be at least 8 characters long and include 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character."
-      );
-      return;
-    }
+    // if (!validatePassword(password)) {
+    //   setPasswordError(
+    //     "Password must be at least 8 characters long and include 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character."
+    //   );
+    //   return;
+    // }
 
     const cleanedNumber = phoneNumber.replace(/\D/g, "");
     if (cleanedNumber.length !== 12 || !cleanedNumber.startsWith("91")) {
@@ -59,7 +66,7 @@ const CompleteRegister = () => {
       // await createUserWithEmailAndPassword(auth, email, password);
       // console.log(typeof number);
       const response = await fetch(
-        "https://backend-dashboard-dsw0.onrender.com/api/v1/user/register",
+        "http://localhost:5000/api/v1/user/register",
         {
           method: "POST",
           headers: {
@@ -68,51 +75,40 @@ const CompleteRegister = () => {
           body: JSON.stringify({          
             name: fullName,
             email: email,
-            password: password,
+            password: confirmPassword,
             company: companyName,
-            number,
+            number:phoneNumber,
           }),
         }
       );
-      console.log(response);
+      
       const data = await response.json();
       console.log(data);
 
       if (response.ok) {
         setSuccess(true);
+        toast.success("User Registered Successfully!!", {
+          position: "top-center",
+          autoClose: 3000,
+        });
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);  
         console.log("User registered successfully:", data);
-      } else {
-        setError(data.message || "Registration failed");
-        console.error("Error registering user:", data);
+      }else{
+        throw new Error(data.message); // Throw an error with the message from the server
       }
-      console.log("User Registered Successfully!!");
-
       // Show toast notification
-      toast.success("User Registered Successfully!!", {
-        position: "top-center",
-        autoClose: 3000,
-      });
+     
 
       // Redirect to login after a short delay
-      setTimeout(() => {
-        navigate("/login");
-      }, 1000);
-
-    } catch (error) {
-
-      if (error.code === "auth/email-already-in-use") {
-        setError("This email is already in use. Please use a different email.");
+    
+    } catch (error) {      
+        setError(error.message);
         toast.error(
-          "This email is already in use. Please use a different email.",
+          error.message,
           { position: "bottom-center" }
-        );
-      } else {
-        console.log(error.message);
-        toast.error("Registration failed. Please try again.", {
-          position: "bottom-center",
-        });
-      }
-      
+        );  
     }
   };
 

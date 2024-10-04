@@ -22,26 +22,34 @@ const GoogleRegister = () => {
       number: additionalInfo.number,
       password: additionalInfo.password
     };
-  
-    // Make API call to save user data
-    const response = await fetch(
-      "http://localhost:5000/api/v1/user/google/register",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      }
-    );
-  
-    if (response.ok) {
-      // Navigate to home page after successful registration
+    try{
+      const response = await fetch(
+        "http://localhost:5000/api/v1/user/google/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        }
+      );
       console.log(response);
-      navigate("/home");
-    } else {
-      console.error("Error completing registration");
+      if (response.ok) {      
+        toast.success("User Registered Successfully!!", {
+          position: "top-center",
+          autoClose: 3000,
+        });
+        setTimeout(() => {
+          navigate("/home");
+        }, 1000);  
+      }else{
+        error.console("error");
+      }
+    }catch(error){
+
     }
+    // Make API call to save user data
+   
   };
   
   return (

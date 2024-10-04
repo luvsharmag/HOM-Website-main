@@ -5,6 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword } from 'firebase/auth'; 
 import {googleProvider} from './firebase';
+import axios from 'axios';
 
 const Login = () => {
   const [successMessage, setSuccessMessage] = useState("");
@@ -120,7 +121,7 @@ const Login = () => {
         idToken: idToken
       };
 
-      
+      //replace http://localhost:5000 by 
       const response = await fetch('http://localhost:5000/api/v1/user/google/check', {
         method: 'POST',
         headers: {
@@ -154,8 +155,13 @@ const Login = () => {
         email,
         password    
       });          
-      console.log('Login successful:', response.data);    
-
+      console.log('Login successful:', response.data); 
+      setSuccessMessage(response.data);   
+      toast.success(response.message, {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      navigate("/home");
     } catch (err) {
       
       setError(err.response?.data?.message || 'An error occurred');
@@ -253,7 +259,7 @@ const Login = () => {
                   {error && <p className="error-message">{error}</p>}
                   
                   <p>
-                    Don't have an account? <a href="/register" className="register-link">Register</a>
+                    Don't have an account? <a href="/completeregister" className="register-link">Register</a>
                   </p>
                 </form>
               </div>
