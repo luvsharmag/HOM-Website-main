@@ -1,0 +1,17 @@
+#company {
+  border: 1px solid #ccc;
+}
+
+#phone-number {
+  border: 1px solid #ccc;
+}
+
+#password {
+  border: 1px solid #ccc;
+}
+
+/* Add hover or focus effects if needed */
+input:focus {
+  border-color: #007bff; /* Change border color on focus */
+  outline: none; /* Remove outline */
+}

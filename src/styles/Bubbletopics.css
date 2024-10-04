@@ -1,0 +1,46 @@
+.bubble {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 60% 60%, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.1) 40%, transparent 70%);
+  border: 0.5px solid rgba(255, 255, 255, 0.3);
+  opacity: 0.9;
+  pointer-events: none;
+  transition: transform 0.1s ease-out, box-shadow 0.3s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Montserrat, sans-serif'; /* From inline styles */
+  letter-spacing: 1px;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6); /* Glow effect */
+  font-weight: 700; /* Tailwind equivalent: font-bold */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Tailwind equivalent: shadow-xl */
+}
+
+.bubble:hover {
+  transform: scale(1.05); /* Tailwind equivalent: hover:scale-110 */
+  box-shadow: 0 0 35px rgba(255, 255, 255, 0.8), inset 0 0 25px rgba(255, 255, 255, 0.6); /* Tailwind equivalent: hover:shadow-2xl */
+  border-color: white; /* Tailwind equivalent: hover:border-white */
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-10px) translateX(10px);
+  }
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+}
+
+@keyframes wobble {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+}
+
