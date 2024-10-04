@@ -41,7 +41,7 @@ const Register = () => {
     try {
       const result = await signInWithPopup(auth, googleProvider); 
       const idToken = await result.user.getIdToken(); 
-
+      console.log(idToken);
       
       const googleUser = {
         name: result.user.displayName,
@@ -67,7 +67,7 @@ const Register = () => {
       } else {
         setUser(googleUser);
         // setIsExistingUser(false);
-        navigate("/googleRegister",{state:googleUser});
+        navigate("/googleRegister",{state:{googleUser}});
         // setShowAdditionalForm(true); 
       }
     } catch (error) {
