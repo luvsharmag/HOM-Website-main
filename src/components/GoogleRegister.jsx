@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./GoogleRegister.css";
+import { handleSubmitFinal } from "../api/auth";
 const GoogleRegister = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -11,42 +12,11 @@ const GoogleRegister = () => {
     number: "",
     password: "",
   });
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Prepare data to send to backend
-    const userData = {
-      ...googleUser,
-      company: additionalInfo.company,
-      number: additionalInfo.number,
-      password: additionalInfo.password,
-    };
-
-    // Make API call to save user data
-    const response = await fetch(
-      "http://localhost:5000/api/v1/user/google/register",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      }
-    );
-
-    if (response.ok) {
-      // Navigate to home page after successful registration
-      navigate("/home");
-    } else {
-      console.error("Error completing registration");
-    }
-  };
-
+ 
   return (
     <div>
       <h2>Complete Your Registration</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmitFinal}>
         <div>
           <label htmlFor="company">Company</label>
           <input

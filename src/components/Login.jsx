@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword } from 'firebase/auth'; 
+import {googleProvider} from './firebase';
 
 const Login = () => {
   const [successMessage, setSuccessMessage] = useState("");
@@ -17,79 +18,150 @@ const Login = () => {
   const auth = getAuth(); // Initialize Firebase auth
   const provider = new GoogleAuthProvider(); // Initialize Google provider
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(null); // Reset error state before attempting login
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setError(null); // Reset error state before attempting login
   
-    // Check for valid email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setError('Invalid email format.');
-      toast.error('Invalid email format.', { position: 'bottom-center' });
-      return;
-    }
+  //   // Check for valid email format
+  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  //   if (!emailRegex.test(email)) {
+  //     setError('Invalid email format.');
+  //     toast.error('Invalid email format.', { position: 'bottom-center' });
+  //     return;
+  //   }
   
-    try {
-      // Try to sign in with email and password using Firebase auth
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+  //   try {
+  //     // Try to sign in with email and password using Firebase auth
+  //     const userCredential = await signInWithEmailAndPassword(auth, email, password);
       
-      // If login is successful
-      console.log('User logged in successfully:', userCredential.user);
-      const displayName = userCredential.user.displayName || "User"; // Use displayName or default to "User"
-      setFullName(displayName);
-      localStorage.setItem("userName", displayName); // Save the user's name in local storage
-      toast.success("User logged in successfully", { position: "top-center" });
-      setSuccessMessage(`Welcome, ${displayName}!`); // Set success message
-      navigate("/home"); // Redirect to your home or profile page after successful login
-    } catch (error) {
-      // Handle specific Firebase errors
-      switch (error.code) {
-        case 'auth/user-not-found':
-          setError('No user found with this email.');
-          toast.error('No user found with this email.', { position: "bottom-center" });
-          break;
-        case 'auth/wrong-password':
-          setError('Incorrect password.');
-          toast.error('Incorrect password.', { position: "bottom-center" });
-          break;
-        case 'auth/invalid-email':
-          setError('Invalid email format.');
-          toast.error('Invalid email format.', { position: "bottom-center" });
-          break;
-        default:
-          setError('Login failed. Please try again.');
-          toast.error('Login failed. Please try again.', { position: "bottom-center" });
-      }
-    }
-  };
+  //     // If login is successful
+  //     console.log('User logged in successfully:', userCredential.user);
+  //     const displayName = userCredential.user.displayName || "User"; // Use displayName or default to "User"
+  //     setFullName(displayName);
+  //     localStorage.setItem("userName", displayName); // Save the user's name in local storage
+  //     toast.success("User logged in successfully", { position: "top-center" });
+  //     setSuccessMessage(`Welcome, ${displayName}!`); // Set success message
+  //     navigate("/home"); // Redirect to your home or profile page after successful login
+  //   } catch (error) {
+  //     // Handle specific Firebase errors
+  //     switch (error.code) {
+  //       case 'auth/user-not-found':
+  //         setError('No user found with this email.');
+  //         toast.error('No user found with this email.', { position: "bottom-center" });
+  //         break;
+  //       case 'auth/wrong-password':
+  //         setError('Incorrect password.');
+  //         toast.error('Incorrect password.', { position: "bottom-center" });
+  //         break;
+  //       case 'auth/invalid-email':
+  //         setError('Invalid email format.');
+  //         toast.error('Invalid email format.', { position: "bottom-center" });
+  //         break;
+  //       default:
+  //         setError('Login failed. Please try again.');
+  //         toast.error('Login failed. Please try again.', { position: "bottom-center" });
+  //     }
+  //   }
+  // };
 
   // Handle Google login
+  // const handleGoogleSignIn = async () => {
+  //   try {
+  //     const result = await signInWithPopup(auth, provider);
+  //     const userEmail = result.user.email;
+  //     const displayName = result.user.displayName || "User"; // Get the display name
+  //     setEmail(userEmail); // Update email state on Google sign in
+  //     setFullName(displayName); // Set full name from Google account
+  //     localStorage.setItem("userName", displayName); // Save user's name in local storage
+  //     toast.success("Signed in with Google successfully", { position: "top-center" });
+  //     setSuccessMessage(`Welcome, ${displayName}!`); // Set success message
+  //     navigate("/home"); // Redirect to profile page after Google login
+  //   } catch (error) {
+  //     setError(error.message || "Failed to sign in with Google");
+  //     toast.error(error.message || "Failed to sign in with Google", { position: "bottom-center" });
+  //   }
+  // };
+
+  // const handleCheckboxChange = () => {
+  //   setRememberMe(!rememberMe);
+  //   if (!rememberMe) {
+  //     localStorage.setItem('userToken', 'your-user-token'); // Handle token saving if required
+  //   } else {
+  //     localStorage.removeItem('userToken');
+  //   }
+  // };
+  
+  // const [isExistingUser, setIsExistingUser] = useState(false);
+  // const [showAdditionalForm, setShowAdditionalForm] = useState(false);
+  
+  // const handleSubmit = async (e) => {
+    //   e.preventDefault();
+    
+    //   if (!validateEmail(email)) {
+      //     setError("Please enter a valid email address.");
+      //     return;
+      //   }
+      
+      //   console.log('Email submitted:', email);
+      //   navigate('/completeregister', { state: { email } });
+      // };
+      
+  const [user, setUser] = useState(null);
+  //for google login If user exist redirect to home other register with additional information
   const handleGoogleSignIn = async () => {
     try {
-      const result = await signInWithPopup(auth, provider);
-      const userEmail = result.user.email;
-      const displayName = result.user.displayName || "User"; // Get the display name
-      setEmail(userEmail); // Update email state on Google sign in
-      setFullName(displayName); // Set full name from Google account
-      localStorage.setItem("userName", displayName); // Save user's name in local storage
-      toast.success("Signed in with Google successfully", { position: "top-center" });
-      setSuccessMessage(`Welcome, ${displayName}!`); // Set success message
-      navigate("/home"); // Redirect to profile page after Google login
+      const result = await signInWithPopup(auth, googleProvider); 
+      const idToken = await result.user.getIdToken(); 
+
+      
+      const googleUser = {
+        name: result.user.displayName,
+        email: result.user.email,
+        idToken: idToken
+      };
+
+      
+      const response = await fetch('http://localhost:5000/api/v1/user/google/check', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(googleUser),
+      });
+
+      const data = await response.json();
+      console.log(data);
+      if (data.exists) {
+        setUser(googleUser);
+        // setIsExistingUser(true);
+        navigate("/home");
+      } else {
+        setUser(googleUser);
+        // setIsExistingUser(false);
+        navigate("/googleRegister",{state:googleUser});
+        // setShowAdditionalForm(true); 
+      }
     } catch (error) {
-      setError(error.message || "Failed to sign in with Google");
-      toast.error(error.message || "Failed to sign in with Google", { position: "bottom-center" });
+      console.error('Error during sign-in', error);
+    }
+};
+//for standard login
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent default form submission
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/v1/user/login', {
+        email,
+        password    
+      });          
+      console.log('Login successful:', response.data);    
+
+    } catch (err) {
+      
+      setError(err.response?.data?.message || 'An error occurred');
+      console.error('Login error:', err);
     }
   };
-
-  const handleCheckboxChange = () => {
-    setRememberMe(!rememberMe);
-    if (!rememberMe) {
-      localStorage.setItem('userToken', 'your-user-token'); // Handle token saving if required
-    } else {
-      localStorage.removeItem('userToken');
-    }
-  };
-
   return (
     <div className="login-container">
       <div className="login-content">
@@ -164,7 +236,7 @@ const Login = () => {
                       onChange={(e) => setPassword(e.target.value)}
                     />
                   </div>
-                  <div className="remember-forgot">
+                  {/* <div className="remember-forgot">
                     <div className="remember-me">
                       <input 
                         type="checkbox" 
@@ -175,7 +247,7 @@ const Login = () => {
                       <label htmlFor="rememberMe">Remember me</label>
                     </div>
                     <a href="/forgotpassword">Forgot password?</a>
-                  </div>
+                  </div> */}
                   <button type="submit" className="login-button">Continue</button>
                   
                   {error && <p className="error-message">{error}</p>}
