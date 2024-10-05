@@ -6,24 +6,25 @@ import "./GoogleRegister.css";
 const GoogleRegister = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
   const googleUser = location.state; // Get googleUser from state
   const [additionalInfo, setAdditionalInfo] = useState({
     company: "",
-    number: "",
+    number: "+91",
     password: "",
   });
-  console.log(googleUser);
   const handleSubmitFinal = async (e) => {
     e.preventDefault();
-    
+
     // Prepare data to send to backend
     const userData = {
       ...googleUser,
       company: additionalInfo.company,
       number: additionalInfo.number,
-      password: additionalInfo.password
+      password: additionalInfo.password,
     };
-    try{
+    
+    try {
       const response = await fetch(
         "http://localhost:5000/api/v1/user/google/register",
         {
@@ -36,25 +37,26 @@ const GoogleRegister = () => {
       );
       console.log(response);
       const data = await response.json();
-      if (response.ok) {            
+      if (response.ok) {
         toast.success(data.message, {
           position: "top-center",
           autoClose: 3000,
         });
-        
-        setTimeout(()=>{
+
+        setTimeout(() => {
           navigate("/home");
-        },2000)
+        }, 2000);
       }else{
-        error.console("error");
-      }
-    }catch(error){
-      toast.error(error);
+        throw new Error(data.message);
+      } 
+    } catch (error) {
+      
+      setError(error.message);
+      toast.error(error.message, { position: "bottom-center" });
     }
     // Make API call to save user data
-   
   };
-  
+
   return (
     <div>
       <h2>Complete Your Registration</h2>
@@ -77,9 +79,14 @@ const GoogleRegister = () => {
             type="text"
             id="phone-number" // Added ID here
             value={additionalInfo.number}
-            onChange={(e) =>
-              setAdditionalInfo({ ...additionalInfo, number: e.target.value })
-            }
+            onChange={(e) => {
+              setAdditionalInfo({
+                ...additionalInfo,
+                number: e.target.value.startsWith("+91")
+                  ? e.target.value
+                  : "+91" + e.target.value,
+              });
+            }}
             required
           />
         </div>
@@ -95,6 +102,7 @@ const GoogleRegister = () => {
             required
           />
         </div>
+        {error && <p className="error-message">{error}</p>}
         <button type="submit">Register</button>
       </form>
       <ToastContainer />

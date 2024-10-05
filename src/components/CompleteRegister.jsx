@@ -107,7 +107,7 @@ const CompleteRegister = () => {
         setError(error.message);
         toast.error(
           error.message,
-          { position: "bottom-center" }
+          { position: "bottom-center",autoClose: 3000, }
         );  
     }
   };
