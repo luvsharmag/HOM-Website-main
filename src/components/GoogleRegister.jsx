@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 import "./GoogleRegister.css";
 
 const GoogleRegister = () => {
@@ -34,19 +35,21 @@ const GoogleRegister = () => {
         }
       );
       console.log(response);
-      if (response.ok) {      
-        toast.success("User Registered Successfully!!", {
+      const data = await response.json();
+      if (response.ok) {            
+        toast.success(data.message, {
           position: "top-center",
           autoClose: 3000,
         });
-        setTimeout(() => {
+        
+        setTimeout(()=>{
           navigate("/home");
-        }, 1000);  
+        },2000)
       }else{
         error.console("error");
       }
     }catch(error){
-
+      toast.error(error);
     }
     // Make API call to save user data
    
@@ -94,6 +97,7 @@ const GoogleRegister = () => {
         </div>
         <button type="submit">Register</button>
       </form>
+      <ToastContainer />
     </div>
   );
 };

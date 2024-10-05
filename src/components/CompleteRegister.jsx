@@ -87,9 +87,9 @@ const CompleteRegister = () => {
 
       if (response.ok) {
         setSuccess(true);
-        toast.success("User Registered Successfully!!", {
+        toast.success("You have successfully registered! Please log in to continue.", {
           position: "top-center",
-          autoClose: 3000,
+          autoClose: 2000,
         });
         setTimeout(() => {
           navigate("/login");
