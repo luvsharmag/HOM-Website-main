@@ -38,6 +38,7 @@ const GoogleRegister = () => {
       console.log(response);
       const data = await response.json();
       if (response.ok) {
+        setError(null);
         toast.success(data.message, {
           position: "top-center",
           autoClose: 3000,
