@@ -98,11 +98,8 @@ const CompleteRegister = () => {
       }else{
         throw new Error(data.message); // Throw an error with the message from the server
       }
-      // Show toast notification
-     
-
-      // Redirect to login after a short delay
-    
+      // Show toast notification    
+      // Redirect to login after a short delay 
     } catch (error) {      
         setError(error.message);
         toast.error(

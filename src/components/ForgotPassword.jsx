@@ -1,16 +1,40 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-import './ForgotPassword.css'; // Make sure to create this CSS file
+import './ForgotPassword.css';
+import axios from 'axios';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
+  // const [message, setMessage] = useState(""); // To store the message
+  // const [error, setError] = useState(false);  // To track if there was an error
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle password reset logic here
-    toast.success("Password reset link sent successfully", {
-      position: "top-center",
-    });
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/v1/user/requestPasswordReset",
+        { email }
+      );
+      console.log(response);
+      // Success case
+      // setMessage(response.data);
+      // setError(false); // Set error to false
+      toast.success(response.data, {
+        position: "top-center",
+        autoClose: 3000,
+      });
+
+    } catch (err) {
+      console.log(err);
+      // Error case
+      // setMessage(err);
+      // setError(true); // Set error to true
+      toast.error(err.response?.data?.message || "An error occurred", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (
@@ -59,7 +83,11 @@ const ForgotPassword = () => {
             />
           </div>
 
-          <button type="submit" className="submit-btn">Continue</button>
+          {/* Display message dynamically */}    
+
+          <button type="submit" className="submit-btn">
+            Continue
+          </button>
 
           <p>
             Don't have an account? <a href="/register">Sign up for free</a>
@@ -71,10 +99,3 @@ const ForgotPassword = () => {
 };
 
 export default ForgotPassword;
-
-
-
-
-
-
-

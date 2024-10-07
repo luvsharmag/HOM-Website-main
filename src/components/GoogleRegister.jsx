@@ -15,7 +15,6 @@ const GoogleRegister = () => {
   });
   const handleSubmitFinal = async (e) => {
     e.preventDefault();
-
     // Prepare data to send to backend
     const userData = {
       ...googleUser,

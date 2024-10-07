@@ -114,7 +114,7 @@ const Login = () => {
 
   const [user, setUser] = useState(null);
   //for google login If user exist redirect to home other register with additional information
-  const handleGoogleSignIn = async () => {
+  const handleGoogleSignIn = async (e) => {
     e.preventDefault();
     try {
       const result = await signInWithPopup(auth, googleProvider);
@@ -267,8 +267,8 @@ const Login = () => {
                       onChange={(e) => setPassword(e.target.value)}
                     />
                   </div>
-                  {/* <div className="remember-forgot">
-                    <div className="remember-me">
+                  <div className="remember-forgot">
+                    {/* <div className="remember-me">
                       <input 
                         type="checkbox" 
                         id="rememberMe" 
@@ -276,9 +276,9 @@ const Login = () => {
                         onChange={handleCheckboxChange} 
                       />
                       <label htmlFor="rememberMe">Remember me</label>
-                    </div>
+                    </div> */}
                     <a href="/forgotpassword">Forgot password?</a>
-                  </div> */}
+                  </div>
                   <button type="submit" className="login-button">
                     Continue
                   </button>
