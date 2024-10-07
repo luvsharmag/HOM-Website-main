@@ -1,38 +1,44 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useAuth0 } from '@auth0/auth0-react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
 import { ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 
 // Pages
-import Home from './pages/Home';
-import About from './pages/About';
-import OurWork from './pages/OurWork';
-import SolutionsPage from './components/solutions/SolutionsPage';
-import BubblePage from './components/solutions/page/Bubblepage';
-import Blog from './pages/Blog';
-import BlogHome from './components/BlogHome';
-import Marketing from './components/Marketing';
-import Seo from './components/Seo';
-import PPC from './components/PPC';
-import SocialMedia from './components/SocialMedia';
-import WebDesign from './components/WebDesign';
-import Internet from './components/Internet';
-import CaseHome from './components/casestudy/CaseHome';
+import Home from "./pages/Home";
+import About from "./pages/About";
+import OurWork from "./pages/OurWork";
+import SolutionsPage from "./components/solutions/SolutionsPage";
+import BubblePage from "./components/solutions/page/Bubblepage";
+import Blog from "./pages/Blog";
+import BlogHome from "./components/BlogHome";
+import Marketing from "./components/Marketing";
+import Seo from "./components/Seo";
+import PPC from "./components/PPC";
+import SocialMedia from "./components/SocialMedia";
+import WebDesign from "./components/WebDesign";
+import Internet from "./components/Internet";
+import CaseHome from "./components/casestudy/CaseHome";
 
 // Authentication
-import Login from './components/Login';
-import Register from './components/Register';
-import ForgotPassword from './components/ForgotPassword';
-import CompleteRegister from './components/CompleteRegister';
-import PrivateRoutes from './utils/PrivateRoutes';
-import GoogleRegister from './components/googleRegister';
+import Login from "./components/Login";
+import Register from "./components/Register";
+import ForgotPassword from "./components/ForgotPassword";
+import CompleteRegister from "./components/CompleteRegister";
+import PrivateRoutes from "./utils/PrivateRoutes";
+import GoogleRegister from "./components/googleRegister";
+import ResetPassword from "./components/ResetPassword";
 
 function App() {
   const { user } = useAuth0();
-  console.log('Current User', user);
+  console.log("Current User", user);
 
   return (
     <>
@@ -42,10 +48,11 @@ function App() {
           {/* Redirect to home page on load */}
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/googleRegister" element={<GoogleRegister/>}/>
+          <Route path="/googleRegister" element={<GoogleRegister />} />
 
           <Route path="/completeregister" element={<CompleteRegister />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
           {/* <Route path="/register" element={<Register />} /> */}
 
           {/* Protected Routes */}

@@ -116,6 +116,7 @@ const Login = () => {
   //for google login If user exist redirect to home other register with additional information
   const handleGoogleSignIn = async (e) => {
     e.preventDefault();
+    
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const idToken = await result.user.getIdToken();
